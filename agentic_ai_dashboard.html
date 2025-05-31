@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard: Agentic AI Python SDKs Comparison</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #2c3e50;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #4db6ac;
+            border-bottom-color: #4db6ac;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        .tab.active {
+            background-color: #4db6ac;
+            color: #ffffff;
+        }
+        .tab {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            width: 100%;
+            max-width: 800px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #4db6ac;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-6">
+            <div class="flex items-center justify-between h-16">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Agentic AI SDKs Dashboard</h1>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#overview" class="nav-link text-gray-600 font-medium pb-1">Overview</a>
+                    <a href="#sdk-deep-dive" class="nav-link text-gray-600 font-medium pb-1">SDK Deep Dive</a>
+                    <a href="#feature-comparison" class="nav-link text-gray-600 font-medium pb-1">Feature Comparison</a>
+                    <a href="#ecosystem" class="nav-link text-gray-600 font-medium pb-1">Ecosystem & DX</a>
+                    <a href="#future-outlook" class="nav-link text-gray-600 font-medium pb-1">Future Outlook</a>
+                </div>
+                 <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:text-[#4db6ac] hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+             <div id="mobile-menu" class="hidden md:hidden py-4">
+                <a href="#overview" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Overview</a>
+                <a href="#sdk-deep-dive" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 rounded-md">SDK Deep Dive</a>
+                <a href="#feature-comparison" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Feature Comparison</a>
+                <a href="#ecosystem" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Ecosystem & DX</a>
+                <a href="#future-outlook" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Future Outlook</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 space-y-16">
+        
+        <section id="overview" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Agentic AI SDK Landscape Overview</h2>
+            <p class="text-center text-lg text-gray-600 max-w-3xl mx-auto mb-12">This dashboard provides an interactive analysis of the leading Python SDKs for building Agentic AI. The landscape is rapidly maturing from experimental tools to enterprise-ready solutions. Explore the data to understand core philosophies, key features, and community strength.</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="card p-6 text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-[#4db6ac]">From Experiment to Enterprise</h3>
+                    <p class="text-gray-600">A major trend is the shift from research-focused frameworks to robust, "production-ready" solutions designed for scalability, reliability, and enterprise integration.</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-[#4db6ac]">Diverse Philosophies</h3>
+                    <p class="text-gray-600">SDKs vary widely, from general-purpose toolkits like LangChain to specialized platforms like CrewAI (role-based) and LlamaIndex (data-centric).</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-[#4db6ac]">Ecosystem is Key</h3>
+                    <p class="text-gray-600">The choice of an SDK depends heavily on the use case, vendor backing (e.g., Microsoft, OpenAI), and the vibrancy of its open-source community.</p>
+                </div>
+            </div>
+
+            <div class="card p-4 md:p-6 mb-12">
+                 <h3 class="text-2xl font-bold text-center mb-4 text-gray-800">Community Popularity: GitHub Stars (Approx.)</h3>
+                 <p class="text-center text-gray-600 mb-6">GitHub stars offer a proxy for community interest and adoption. LangChain currently leads, indicating its widespread use as a general-purpose framework.</p>
+                <div class="chart-container mx-auto">
+                    <canvas id="githubStarsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card p-4 md:p-6">
+                <h3 class="text-2xl font-bold text-center mb-4 text-gray-800">Find Your SDK ✨</h3>
+                <p class="text-center text-gray-600 mb-6">Describe your project requirements, and our AI will recommend the most suitable Agentic AI SDKs for you.</p>
+                <div class="flex flex-col items-center max-w-2xl mx-auto">
+                    <textarea id="project-requirements" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#4db6ac] focus:border-transparent mb-4" rows="5" placeholder="E.g., 'I need to build a multi-agent system for customer support that can integrate with a knowledge base and external APIs.'"></textarea>
+                    <button id="get-recommendation-button" class="bg-[#4db6ac] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#38a397] transition-colors shadow-md">
+                        Get Recommendation ✨
+                    </button>
+                    <div id="recommendation-loading" class="loading-indicator">Generating recommendation...</div>
+                    <div id="sdk-recommendation-output" class="mt-6 w-full p-4 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden">
+                        <h4 class="font-semibold text-lg mb-2">Recommended SDKs:</h4>
+                        <p id="recommendation-text"></p>
+                    </div>
+                    <div id="recommendation-error" class="mt-4 text-red-600 hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sdk-deep-dive" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">SDK Deep Dive</h2>
+            <p class="text-center text-lg text-gray-600 max-w-3xl mx-auto mb-12">Select an SDK to explore its core paradigm, key differentiators, and maintainers. This section helps you understand the specific strengths and design philosophies of each framework to better match them to your project needs.</p>
+            
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+            </div>
+
+            <div id="sdk-details" class="card p-6 md:p-8 min-h-[300px] flex flex-col items-center justify-center">
+                <p class="text-gray-500 text-lg">Select an SDK above to see details.</p>
+                <div id="explain-concept-area" class="mt-6 w-full hidden">
+                    <button id="explain-concept-button" class="bg-blue-500 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-600 transition-colors shadow-md text-sm">
+                        Explain Core Concepts ✨
+                    </button>
+                    <div id="concept-explanation-loading" class="loading-indicator">Generating explanation...</div>
+                    <div id="concept-explanation-output" class="mt-4 p-4 bg-blue-50 rounded-md border border-blue-200 text-blue-800 hidden">
+                        <h4 class="font-semibold text-lg mb-2">Explanation:</h4>
+                        <p id="explanation-text"></p>
+                    </div>
+                    <div id="concept-explanation-error" class="mt-4 text-red-600 hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="feature-comparison" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Core Feature Comparison</h2>
+            <p class="text-center text-lg text-gray-600 max-w-3xl mx-auto mb-12">Agentic frameworks are defined by how they handle multi-agent orchestration, memory, and tool integration. This section compares these core capabilities across the leading SDKs, highlighting their distinct architectural approaches.</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-3 text-[#4db6ac]">Multi-Agent Orchestration</h3>
+                    <ul class="space-y-2 text-sm text-gray-700 list-disc list-inside">
+                        <li><span class="font-semibold">LangGraph:</span> Graph-based (DAG) for explicit control.</li>
+                        <li><span class="font-semibold">AutoGen:</span> Asynchronous multi-agent chat.</li>
+                        <li><span class="font-semibold">CrewAI:</span> Role-based with social dynamics.</li>
+                        <li><span class="font-semibold">OpenAI SDK:</span> "Handoffs" for control transfer.</li>
+                        <li><span class="font-semibold">Semantic Kernel:</span> "Planner" for dynamic workflows.</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-3 text-[#4db6ac]">Memory Management</h3>
+                    <ul class="space-y-2 text-sm text-gray-700 list-disc list-inside">
+                        <li><span class="font-semibold">LangChain:</span> Rich modular memory (buffer, vector, etc.).</li>
+                        <li><span class="font-semibold">AutoGen:</span> Caching and features for ongoing processes.</li>
+                        <li><span class="font-semibold">CrewAI:</span> Short-term (RAG), long-term (DB), and entity memory.</li>
+                        <li><span class="font-semibold">Semantic Kernel:</span> `ChatHistoryReducer` to condense context.</li>
+                        <li><span class="font-semibold">LlamaIndex:</span> Stores completed tasks in memory modules.</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-3 text-[#4db6ac]">Model & Provider Agnosticism</h3>
+                    <ul class="space-y-2 text-sm text-gray-700 list-disc list-inside">
+                        <li><span class="font-semibold">LangChain:</span> Highly agnostic, supports most providers.</li>
+                        <li><span class="font-semibold">OpenAI SDK:</span> Agnostic in theory, but optimized for OpenAI.</li>
+                        <li><span class="font-semibold">Semantic Kernel:</span> Broad support (Azure, OpenAI, Hugging Face).</li>
+                        <li><span class="font-semibold">CrewAI:</span> Flexible, integrates with local models via Ollama.</li>
+                        <li><span class="font-semibold">LlamaIndex:</span> Connects to all popular providers.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="ecosystem" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Ecosystem & Developer Experience</h2>
+            <p class="text-center text-lg text-gray-600 max-w-3xl mx-auto mb-12">The success of an open-source framework often hinges on its developer experience (DX). This includes the quality of its documentation, the size and activity of its community, and its learning curve. This chart provides a qualitative comparison based on the report's findings.</p>
+            <div class="card p-4 md:p-6">
+                <h3 class="text-2xl font-bold text-center mb-4 text-gray-800">Developer Experience Profile</h3>
+                <div class="chart-container mx-auto">
+                    <canvas id="dxChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="future-outlook" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Future Outlook & Vendor Roadmaps</h2>
+             <p class="text-center text-lg text-gray-600 max-w-3xl mx-auto mb-12">The agentic AI field is evolving at a breakneck pace. Key trends include a push towards multimodality, deeper enterprise integration, and enhanced observability tools. Below are the strategic directions of major vendors, showing where the ecosystem is headed.</p>
+            <div id="roadmap-accordion" class="space-y-4 max-w-4xl mx-auto">
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-white mt-16 border-t">
+        <div class="container mx-auto py-6 px-4 text-center text-gray-500">
+            <p>Interactive dashboard created based on "A Comprehensive Comparative Analysis of Leading Agentic AI Python SDKs".</p>
+            <p>&copy; 2025 AI Insights. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sdkData = {
+                'LangChain': {
+                    focus: 'Modular LLM application development, general-purpose.',
+                    differentiator: 'Extensive integrations, flexible "chains", and broad applicability across use cases.',
+                    maintainer: 'LangChain Inc.',
+                    color: '#81c784',
+                    details: `One of the most widely adopted frameworks, known for its modular tools and robust abstractions. It simplifies complex LLM workflows with components for chaining, agents, and memory. Its strength is its flexibility and vast ecosystem.`
+                },
+                'LangGraph': {
+                    focus: 'Graph-based workflow orchestration for stateful agents.',
+                    differentiator: 'Explicit DAG control over agent steps, enabling complex branching, error handling, and human-in-the-loop.',
+                    maintainer: 'LangChain Inc.',
+                    color: '#64b5f6',
+                    details: `Built on LangChain, LangGraph is a lower-level framework for building long-running, stateful agents. It treats agent workflows as graphs, giving developers precise control over the execution flow.`
+                },
+                'AutoGen': {
+                    focus: 'Multi-agent collaboration and automation.',
+                    differentiator: 'Enables multiple agents to autonomously collaborate and communicate via asynchronous chat to solve complex tasks.',
+                    maintainer: 'Microsoft',
+                    color: '#ffb74d',
+                    details: `Microsoft's framework excels at creating systems where multiple AI agents work together. Its event-driven architecture is highly scalable and it's converging with Semantic Kernel for better enterprise support.`
+                },
+                'CrewAI': {
+                    focus: 'Role-based collaborative intelligence.',
+                    differentiator: 'Lightweight framework "built from scratch" where agents are assigned roles and goals to work as a team.',
+                    maintainer: 'CrewAI',
+                    color: '#ba68c8',
+                    details: `CrewAI simplifies creating autonomous agent teams. It mimics human team dynamics, making it excellent for structured business process automation, research, and collaborative tasks.`
+                },
+                'OpenAI Agents SDK': {
+                    focus: 'Lightweight multi-agent workflows, OpenAI-native.',
+                    differentiator: 'Minimalist, production-ready design with intelligent "Handoffs" for agent-to-agent task delegation.',
+                    maintainer: 'OpenAI',
+                    color: '#4dd0e1',
+                    details: `A potent, Python-first framework for building agent workflows. While provider-agnostic, it's deeply integrated with OpenAI's model ecosystem, offering powerful built-in tools like web search and file search.`
+                },
+                'Semantic Kernel': {
+                    focus: 'Enterprise-grade AI integration.',
+                    differentiator: 'Multi-language support (Python, C#, Java) for embedding AI into existing enterprise applications with "Plugins".',
+                    maintainer: 'Microsoft',
+                    color: '#f06292',
+                    details: `Designed by Microsoft to integrate AI into traditional software. It acts as an orchestrator, connecting AI services to existing codebases, with strong integration into the Azure ecosystem.`
+                },
+                'LlamaIndex': {
+                    focus: 'Data-centric knowledge assistants (RAG).',
+                    differentiator: 'Strong synergy between data retrieval and agent functionalities for connecting LLMs to proprietary data.',
+                    maintainer: 'LlamaIndex',
+                    color: '#9575cd',
+                    details: `A specialized framework for building knowledge agents. Its primary strength is in data ingestion, indexing, and Retrieval-Augmented Generation (RAG), making it ideal for context-augmented assistants.`
+                }
+            };
+
+            const roadmapData = {
+                'LangChain': 'Focus on compatibility with new models, enterprise connectors (SAP, Salesforce), and advanced memory modules. LangGraph Platform will add scheduling and smart caching.',
+                'Microsoft (AutoGen & SK)': 'Strategic convergence of AutoGen and Semantic Kernel to create a unified, enterprise-ready agent framework. Focus on improved observability, scalability, and tooling.',
+                'CrewAI': 'Roadmap includes native multimodal support, enhanced enterprise integrations, and tools to democratize agent creation for non-technical users.',
+                'OpenAI': 'Shifting from Assistants API to the new, more flexible Responses API. Future work includes enhanced memory, safety guardrails, and more powerful custom tools.',
+                'LlamaIndex': 'Improving production readiness with stable interfaces and security. Adding advanced capabilities like knowledge graphs, multimodal support, and step-wise reasoning.'
+            };
+
+            const dxData = {
+                labels: ['LangChain', 'AutoGen', 'CrewAI', 'OpenAI SDK', 'Semantic Kernel', 'LlamaIndex'],
+                datasets: [
+                    {
+                        label: 'Learning Curve (Lower is Better)',
+                        data: [3, 4, 2, 2, 4, 3],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        pointBackgroundColor: 'rgb(255, 99, 132)',
+                    },
+                    {
+                        label: 'Documentation Quality',
+                        data: [3, 3, 4, 4, 3, 5],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        pointBackgroundColor: 'rgb(54, 162, 235)',
+                    },
+                    {
+                        label: 'Community Support',
+                        data: [5, 4, 4, 4, 3, 5],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        pointBackgroundColor: 'rgb(75, 192, 192)',
+                    }
+                ]
+            };
+            
+            const githubStarsData = {
+                labels: ['LangChain', 'AutoGen', 'LlamaIndex', 'CrewAI', 'Semantic Kernel', 'LangGraph', 'OpenAI SDK', 'Haystack', 'Hugging Face SmolAgents'],
+                datasets: [{
+                    label: 'GitHub Stars (in thousands)',
+                    data: [108, 44.7, 34.8, 31.8, 22.9, 12.9, 10.4, 20.8, 18.9],
+                    backgroundColor: [
+                        '#4db6ac', '#81c784', '#64b5f6', '#ffb74d',
+                        '#ba68c8', '#f06292', '#9575cd', '#a1887f', '#e57373'
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderWidth: 1
+                }]
+            };
+
+            function createChart(ctx, type, data, options) {
+                new Chart(ctx, { type, data, options });
+            }
+
+            const starsCtx = document.getElementById('githubStarsChart').getContext('2d');
+            createChart(starsCtx, 'bar', githubStarsData, {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.raw}k stars`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Stars (Thousands)' },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    y: {
+                         grid: { display: false }
+                    }
+                }
+            });
+
+            const dxCtx = document.getElementById('dxChart').getContext('2d');
+            createChart(dxCtx, 'radar', dxData, {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.dataset.label}: ${context.raw} / 5`
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5,
+                        min: 0,
+                        ticks: { stepSize: 1 },
+                        pointLabels: { font: { size: 14 } },
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        angleLines: { color: 'rgba(0,0,0,0.05)' }
+                    }
+                }
+            });
+
+            const tabContainer = document.querySelector('#sdk-deep-dive .flex-wrap');
+            const sdkDetailsContainer = document.getElementById('sdk-details');
+            const explainConceptArea = document.getElementById('explain-concept-area');
+            const explainConceptButton = document.getElementById('explain-concept-button');
+            const conceptExplanationLoading = document.getElementById('concept-explanation-loading');
+            const conceptExplanationOutput = document.getElementById('concept-explanation-output');
+            const explanationText = document.getElementById('explanation-text');
+            const conceptExplanationError = document.getElementById('concept-explanation-error');
+
+            Object.keys(sdkData).forEach(sdkName => {
+                const tab = document.createElement('button');
+                tab.className = 'tab px-4 py-2 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-[#4db6ac] hover:text-white shadow-sm';
+                tab.textContent = sdkName;
+                tab.dataset.sdk = sdkName;
+                tabContainer.appendChild(tab);
+            });
+            
+            tabContainer.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const sdkName = e.target.dataset.sdk;
+                    const data = sdkData[sdkName];
+
+                    document.querySelectorAll('#sdk-deep-dive .tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    sdkDetailsContainer.innerHTML = `
+                        <div class="w-full transition-opacity duration-500">
+                            <h3 class="text-2xl font-bold mb-2" style="color:${data.color};">${sdkName}</h3>
+                            <p class="text-sm font-medium text-gray-500 mb-4">Maintained by: ${data.maintainer}</p>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Primary Focus:</h4>
+                                    <p class="text-gray-600" id="sdk-focus">${data.focus}</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Key Differentiator:</h4>
+                                    <p class="text-gray-600" id="sdk-differentiator">${data.differentiator}</p>
+                                </div>
+                                 <div>
+                                    <h4 class="font-semibold text-gray-700">Summary:</h4>
+                                    <p class="text-gray-600">${data.details}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    // Re-append the explain concept area and make it visible
+                    sdkDetailsContainer.appendChild(explainConceptArea);
+                    explainConceptArea.classList.remove('hidden');
+                    conceptExplanationOutput.classList.add('hidden'); // Hide previous explanation
+                    conceptExplanationError.classList.add('hidden'); // Hide previous error
+                }
+            });
+
+            explainConceptButton.addEventListener('click', async () => {
+                const selectedSdkName = document.querySelector('#sdk-deep-dive .tab.active')?.dataset.sdk;
+                if (!selectedSdkName) {
+                    conceptExplanationError.textContent = 'Please select an SDK first.';
+                    conceptExplanationError.classList.remove('hidden');
+                    return;
+                }
+
+                const sdkFocus = document.getElementById('sdk-focus')?.textContent;
+                const sdkDifferentiator = document.getElementById('sdk-differentiator')?.textContent;
+                const prompt = `Explain the concept of "${sdkFocus}" and "${sdkDifferentiator}" in the context of Agentic AI SDKs, specifically mentioning how it applies to ${selectedSdkName}. Keep the explanation concise and easy to understand.`;
+
+                conceptExplanationLoading.style.display = 'block';
+                conceptExplanationOutput.classList.add('hidden');
+                conceptExplanationError.classList.add('hidden');
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        explanationText.textContent = text;
+                        conceptExplanationOutput.classList.remove('hidden');
+                    } else {
+                        conceptExplanationError.textContent = 'Failed to get explanation. Please try again.';
+                        conceptExplanationError.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    console.error('Error fetching explanation:', error);
+                    conceptExplanationError.textContent = 'An error occurred while fetching the explanation. Please try again.';
+                    conceptExplanationError.classList.remove('hidden');
+                } finally {
+                    conceptExplanationLoading.style.display = 'none';
+                }
+            });
+
+            const getRecommendationButton = document.getElementById('get-recommendation-button');
+            const projectRequirementsInput = document.getElementById('project-requirements');
+            const recommendationLoading = document.getElementById('recommendation-loading');
+            const sdkRecommendationOutput = document.getElementById('sdk-recommendation-output');
+            const recommendationText = document.getElementById('recommendation-text');
+            const recommendationError = document.getElementById('recommendation-error');
+
+            getRecommendationButton.addEventListener('click', async () => {
+                const requirements = projectRequirementsInput.value.trim();
+                if (!requirements) {
+                    recommendationError.textContent = 'Please enter your project requirements.';
+                    recommendationError.classList.remove('hidden');
+                    return;
+                }
+
+                const availableSDKs = Object.keys(sdkData).join(', ');
+                const prompt = `Given the following project requirements: "${requirements}", which Agentic AI Python SDK(s) from the following list would you recommend and why? List of SDKs: ${availableSDKs}. For each recommendation, briefly explain its core benefits for these specific requirements.`;
+
+                recommendationLoading.style.display = 'block';
+                sdkRecommendationOutput.classList.add('hidden');
+                recommendationError.classList.add('hidden');
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        recommendationText.textContent = text;
+                        sdkRecommendationOutput.classList.remove('hidden');
+                    } else {
+                        recommendationError.textContent = 'Failed to get recommendation. Please try again.';
+                        recommendationError.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    console.error('Error fetching recommendation:', error);
+                    recommendationError.textContent = 'An error occurred while fetching the recommendation. Please try again.';
+                    recommendationError.classList.remove('hidden');
+                } finally {
+                    recommendationLoading.style.display = 'none';
+                }
+            });
+
+
+            const accordionContainer = document.getElementById('roadmap-accordion');
+            Object.entries(roadmapData).forEach(([vendor, text]) => {
+                const item = document.createElement('div');
+                item.className = 'card';
+                item.innerHTML = `
+                    <button class="accordion-button w-full flex justify-between items-center text-left p-4">
+                        <span class="font-semibold text-lg text-gray-800">${vendor}</span>
+                        <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content px-4">
+                        <p class="text-gray-600 py-4 border-t border-gray-200">${text}</p>
+                    </div>
+                `;
+                accordionContainer.appendChild(item);
+            });
+
+            accordionContainer.addEventListener('click', e => {
+                const button = e.target.closest('.accordion-button');
+                if (button) {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('svg');
+                    
+                    const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+                    document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = '0px');
+                    document.querySelectorAll('.accordion-button svg').forEach(i => i.classList.remove('rotate-180'));
+
+                    if (!isOpen) {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.classList.add('rotate-180');
+                    }
+                }
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link, #mobile-menu a');
+            const sections = document.querySelectorAll('main section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+
+            sections.forEach(section => observer.observe(section));
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                   if (mobileMenu.classList.contains('hidden') === false) {
+                       mobileMenu.classList.add('hidden');
+                   }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
